@@ -48,7 +48,7 @@
 
         const marsRoverGame = (rows, columns) => {
             gridCreation(rows,columns);
-            //randomPlaceSpaceship(rows,columns);
+            randomPlaceSpaceship(rows,columns);
         }
 
         const gridCreation = (rows, columns) => {
@@ -68,25 +68,20 @@
             }
 
             gridContainer.appendChild(row);
+            }
         }
-        }
-        /*
+        
         const randomPlaceSpaceship = (rows, columns) => {
-            //Random position spaship
             const randomRow = Math.floor(Math.random() * rows);
             const randomColumn = Math.floor(Math.random() * columns);
 
-            //Select cell
-            let cell = gridContainer.children[randomRow].children[randomColumn];
+            // Select cell
+            const row = gridContainer.children[randomRow];
+            const cell = row.children[randomColumn];
 
-            //Create div html for spaceship
-            let textElement = document.createElement('div');
-            textElement.textContent = spaceShip;
-
-            //Append spaceship on grid
-            cell.appendChild(textElement);
+            cell.textContent = spaceShip;
         }
-        */
+        
         document.getElementById('grid-form').addEventListener("submit", game);
     </script>
 </body>
