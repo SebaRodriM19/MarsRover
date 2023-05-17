@@ -114,25 +114,37 @@
         }
         const movementSpaceShip = (direction) => {
             const foundSpaceShip = findSpaceShip();
-
-            const row = foundSpaceShip.parentNode;  // row that contain spaceship
-            const rowIndex = Array.from(row.children).indexOf(foundSpaceShip);  
-           const columnIndex = Array.from(gridContainer.children).indexOf(row);
+            const row = foundSpaceShip.parentNode; // riga che contiene la spaceship
+            const rowIndex = Array.from(row.children).indexOf(foundSpaceShip);
+            const columnIndex = Array.from(gridContainer.children).indexOf(row);
 
             let targetCell;
 
             switch (direction) {
                 case 'ArrowUp':
-                    targetCell = gridContainer.children[columnIndex - 1]?.children[rowIndex];
+                    // "?" set null a value out of index without generating errors.
+                    targetCell = gridContainer.children[columnIndex - 1]?.children[rowIndex]; 
+                    if (!targetCell) {
+                        targetCell = gridContainer.lastElementChild.children[rowIndex]; //last element col same row
+                    }
                     break;
                 case 'ArrowDown':
                     targetCell = gridContainer.children[columnIndex + 1]?.children[rowIndex];
+                    if (!targetCell) {
+                        targetCell = gridContainer.firstElementChild.children[rowIndex]; //first element col same row
+                    }
                     break;
                 case 'ArrowLeft':
                     targetCell = row.children[rowIndex - 1];
+                    if (!targetCell) {
+                        targetCell = row.lastElementChild; //last element row same row
+                    }
                     break;
                 case 'ArrowRight':
                     targetCell = row.children[rowIndex + 1];
+                    if (!targetCell) {
+                        targetCell = row.firstElementChild; //first element row same row
+                    }
                     break;
             }
 
@@ -140,8 +152,9 @@
                 targetCell.textContent = spaceShip;
                 foundSpaceShip.textContent = '-';
                 console.log('Movimento spaceship effettuato');
-                }
             }
+        }
+
 
         const findSpaceShip = () => {
             let foundSpaceShip = null; 
