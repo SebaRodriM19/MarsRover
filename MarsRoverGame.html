@@ -6,15 +6,28 @@
     <style>
         body{
             margin: 15px;
-            background-color: grey;
+            background-color: black;
         }
         #grid-container{
             padding: 2px;
             margin: 3px;
         }
         .grid-item {
-            padding: 10px;
+            margin: 5px;
+            padding: 7px;
             text-align: center;
+            border: 1px dashed #CDBA81;
+            border-radius: 5px;
+        }
+
+        h1{
+            color: gray;
+            margin: 5px;
+        }
+
+        h2{
+            color: grey;
+            margin: 5px;
         }
 
     </style>
@@ -24,14 +37,19 @@
     <h1>🛸 Mars Rover 🛸</h1>
     <h2>Hi from mars rover in javascript</h2>
 
-    <form id="grid-form">
-        <label for="rows-input"></label>
-        <input type="number" id="rows-input" required>
-        <label for="columns-input"></label>
-        <input type="number" id="columns-input" required>
-
-        <button type="submit">Start</button>
-      </form>
+    <form id="grid-form" class="row g-2 align-items-center">
+        <div class="col">
+            <label for="rows-input" class="form-label visually-hidden">Rows</label>
+            <input type="number" id="rows-input" class="form-control" required>
+        </div>
+        <div class="col">
+            <label for="columns-input" class="form-label visually-hidden">Columns</label>
+            <input type="number" id="columns-input" class="form-control" required>
+        </div>
+        <div class="col-auto">
+            <button type="submit" class="btn btn-success">Start</button>
+        </div>
+    </form>
 
       <div id="grid-container" class="row"></div>
 
@@ -40,6 +58,7 @@
         const rowsInput = document.getElementById('rows-input');
         const columnsInput = document.getElementById('columns-input');
         const spaceShip = '🚀';
+        const gridItems = [];  // Array for movements
 
         const game = (event) => {
             event.preventDefault();
@@ -54,6 +73,7 @@
         const gridCreation = (rows, columns) => {
             //Remove previous grid
             gridContainer.innerHTML = '';
+            gridItems.length = 0;
 
             //Create cells
             for (let i = 0; i < rows; i++) {
@@ -63,8 +83,10 @@
             for (let j = 0; j < columns; j++) {
                 const gridItem = document.createElement('div');
                 gridItem.textContent = "-";
-                gridItem.className = 'grid-item col border';
+                gridItem.className = 'grid-item col text-white';
                 row.appendChild(gridItem);
+
+                gridItems.push(gridItem);  
             }
 
             gridContainer.appendChild(row);
@@ -81,8 +103,59 @@
 
             cell.textContent = spaceShip;
         }
-        
+        const moveSpaceship = (event) => {
+            const arrowKeys = ['ArrowUp', 'ArrowDown', 'ArrowLeft', 'ArrowRight'];
+
+            if (arrowKeys.includes(event.key)) {
+                event.preventDefault();
+
+                movementSpaceShip(event.key);
+            }
+        }
+        const movementSpaceShip = (direction) => {
+            const foundSpaceShip = findSpaceShip();
+
+            const row = foundSpaceShip.parentNode;  // row that contain spaceship
+            const rowIndex = Array.from(row.children).indexOf(foundSpaceShip);  
+           const columnIndex = Array.from(gridContainer.children).indexOf(row);
+
+            let targetCell;
+
+            switch (direction) {
+                case 'ArrowUp':
+                    targetCell = gridContainer.children[columnIndex - 1]?.children[rowIndex];
+                    break;
+                case 'ArrowDown':
+                    targetCell = gridContainer.children[columnIndex + 1]?.children[rowIndex];
+                    break;
+                case 'ArrowLeft':
+                    targetCell = row.children[rowIndex - 1];
+                    break;
+                case 'ArrowRight':
+                    targetCell = row.children[rowIndex + 1];
+                    break;
+            }
+
+            if (targetCell && targetCell.textContent !== spaceShip) {
+                targetCell.textContent = spaceShip;
+                foundSpaceShip.textContent = '-';
+                console.log('Movimento spaceship effettuato');
+                }
+            }
+
+        const findSpaceShip = () => {
+            let foundSpaceShip = null; 
+
+            for (const gridItem of gridItems) {
+                if (gridItem.textContent === spaceShip) {
+                    foundSpaceShip = gridItem;
+                    break;
+                }
+            }
+            return foundSpaceShip;    
+        }
         document.getElementById('grid-form').addEventListener("submit", game);
+        document.addEventListener('keydown', moveSpaceship);
     </script>
 </body>
 </html>
