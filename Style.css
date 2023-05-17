@@ -1,0 +1,25 @@
+body{
+    margin: 15px;
+    background-color: black;
+}
+#grid-container{
+    padding: 2px;
+    margin: 3px;
+}
+.grid-item {
+    margin: 5px;
+    padding: 7px;
+    text-align: center;
+    border: 1px dashed #CDBA81;
+    border-radius: 5px;
+}
+
+h1{
+    color: gray;
+    margin: 5px;
+}
+
+h2{
+    color: grey;
+    margin: 5px;
+}
